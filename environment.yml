@@ -9,7 +9,6 @@ dependencies:
   - pandas
   - Pillow
   - openpyxl
-  - plotly
   - pip
   - pip:
     - streamlit
