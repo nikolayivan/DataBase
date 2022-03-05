@@ -12,5 +12,6 @@ dependencies:
   - plotly
   - pip
   - pip:
-     - streamlit
-     - plotly-express
+    - streamlit
+    - plotly
+    - plotly-express
