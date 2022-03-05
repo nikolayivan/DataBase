@@ -7,7 +7,7 @@ def app():
     st.title('Система сбора данных и мониториг 📈')
     st.sidebar.write('')
     st.sidebar.info('About: \n This is a demo version of web application designed to recode and analyse parameters from EPU. All rights belongs to JSC Profotech.')
-    FolderPath = r'C:\Users\testingcenter\Documents\StreamlitApps\006_DataBase\data'
+    FolderPath = r'./data'
     FileName = '\Таблица Данных.xlsx'
 
     if 'DataBase_df' not in st.session_state:
