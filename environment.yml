@@ -6,5 +6,6 @@ dependencies:
   - plotly
   - Pillow
   - openpyxl
+  - pip
   - pip:
      - streamlit
