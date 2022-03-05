@@ -2,12 +2,13 @@ name: app
 channels:
   - conda-forge
   - defaults
+  - plotly
 dependencies:
   - python=3.10
   - numpy
   - pandas
   - Pillow
   - openpyxl
+  - plotly
   - pip:
      - streamlit
-     - plotly
