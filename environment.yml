@@ -1,4 +1,5 @@
-name: stats
+channles:
+  - conda-forge
 dependencies:
   - python=3.10
   - numpy
