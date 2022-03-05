@@ -1,9 +1,10 @@
 name: stats
 dependencies:
-  - python
-  - streamlit
+  - python=3.10
   - numpy
   - pandas
   - plotly
   - Pillow
   - openpyxl
+  - pip:
+     - streamlit
