@@ -50,10 +50,10 @@ def app():
         con_2 = st.container()
 
         if st.checkbox('Выбрать все трансформаторы'):
-            RowOptionList = set(Plot_df['Данные ЭОБ: Зав. номер трансформатора'].tolist())
+            RowOptionList = list(dict.fromkeys(Plot_df['Данные ЭОБ: Зав. номер трансформатора'].tolist()))
             RowOption = RowOptionList
         else:
-            RowOption = set(Plot_df['Данные ЭОБ: Зав. номер трансформатора'].tolist())
+            RowOption = list(dict.fromkeys(Plot_df['Данные ЭОБ: Зав. номер трансформатора'].tolist()))
             RowOptionList = None
 
         con_3 = st.container()
