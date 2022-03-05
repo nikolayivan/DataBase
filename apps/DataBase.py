@@ -8,7 +8,7 @@ def app():
     st.sidebar.write('')
     st.sidebar.info('About: \n This is a demo version of web application designed to recode and analyse parameters from EPU. All rights belongs to JSC Profotech.')
     FolderPath = r'./data'
-    FileName = '\Таблица Данных.xlsx'
+    FileName = '/Таблица Данных.xlsx'
 
     if 'DataBase_df' not in st.session_state:
         st.session_state['DataBase_df'] = {}
