@@ -1,3 +1,4 @@
+name: app
 channles:
   - conda-forge
 dependencies:
