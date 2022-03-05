@@ -10,7 +10,7 @@ st.set_page_config(page_title = 'Калибровка', layout = 'wide', page_ic
 app = MultiApp()
 
 with st.sidebar:
-    image = Image.open(r'C:\Users\testingcenter\Documents\StreamlitApps\006_DataBase\img\logo-en.png')
+    image = Image.open(r'./img/logo-en.png')
     st.image(image)
 
     # st.info('About: This web application ...')
