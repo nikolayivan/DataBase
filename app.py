@@ -1,5 +1,5 @@
 import streamlit as st
-import streamlit_authenticator as stauth
+# import streamlit_authenticator as stauth
 from PIL import Image
 
 from multiapp import MultiApp
