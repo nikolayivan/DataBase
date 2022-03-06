@@ -5,9 +5,11 @@ dependencies:
   - python
   - numpy
   - pandas
+  - openpyxl
+  - plotly
   - pip
   - pip:
     - streamlit
     - Pillow
     - openpyxl
-    - plotly==5.6.0
+    - plotly
