@@ -1,3 +1,5 @@
+!pip install openpyxl
+
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -5,8 +7,8 @@ import pandas as pd
 # import os
 # import re
 from datetime import datetime
-# from openpyxl import workbook
-# from openpyxl import load_workbook
+from openpyxl import workbook
+from openpyxl import load_workbook
 
 
 def app():
