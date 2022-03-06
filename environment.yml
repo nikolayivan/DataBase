@@ -1,0 +1,16 @@
+name: base
+channels:
+  - defaults
+  - conda-forge
+  - anaconda
+  - plotly
+dependencies:
+  - python
+  - pandas
+  - numpy
+  - openpyxl
+  - plotly
+  - Pillow
+  - pip
+  - pip:
+    - streamlit
