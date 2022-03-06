@@ -1,5 +1,6 @@
 name: base
 channels:
+  - defaults
   - conda-forge
 dependencies:
   - python
@@ -7,9 +8,7 @@ dependencies:
   - pandas
   - openpyxl
   - plotly
+  - Pillow
   - pip
   - pip:
     - streamlit
-    - Pillow
-    - openpyxl
-    - plotly
