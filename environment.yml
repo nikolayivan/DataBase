@@ -6,7 +6,7 @@ channels:
   - plotly
 dependencies:
   - python
-  - pandas
+  - pandas=1.4.1
   - numpy
   - openpyxl
   - plotly
