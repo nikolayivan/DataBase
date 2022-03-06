@@ -1,8 +1,8 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import plotly
-import plotly.express as px
+# import plotly
+# import plotly.express as px
 
 def app():
     st.title('Система сбора данных и мониториг 📈')
