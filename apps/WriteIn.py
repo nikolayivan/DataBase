@@ -4,8 +4,6 @@ import pandas as pd
 
 import openpyxl
 from datetime import datetime
-# from openpyxl import workbook
-# from openpyxl import load_workbook
 
 def app():
     st.title('Система сбора данных и мониториг 📈')
