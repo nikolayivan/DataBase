@@ -3,14 +3,13 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-# import plotly.express as px
-# import os
-# import re
+
 import openpyxl
 from datetime import datetime
 from openpyxl import workbook
 from openpyxl import load_workbook
 
+from func.append import append_df_to_excel
 
 def app():
     st.title('Система сбора данных и мониториг 📈')
@@ -31,15 +30,19 @@ def app():
             DataBase_df.dropna(how='all', axis=1, inplace=True)
         return DataBase_df
 
-    con_1 = st.container()
-    ColOption = st.checkbox('Исключить пустые столбцы')
-
     if not st.session_state['DataBase_df']:
-        DataBase_df = LoadDataBase(FolderPath,FileName, ColOption)
+        DataBase_df = LoadDataBase(FolderPath,FileName, ColOption=False)
         DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
         st.session_state['DataBase_df'] = DataBase_df.to_dict()
     else:
         DataBase_df = pd.DataFrame(st.session_state['DataBase_df'])
+
+    st.write('Обновить таблицу:')
+    # con_1.button('Обновить', on_click=LoadDataBase, args=(FolderPath,FileName,ColOption),)
+    if st.button('Обновить'):
+        DataBase_df = LoadDataBase(FolderPath,FileName, ColOption=False)
+        DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
+        st.session_state['DataBase_df'] = DataBase_df.to_dict()
 
     st.write("Общее кол-во записей: ", DataBase_df.shape[0] )
     st.write("Общее кол-во столбцов: ", DataBase_df.shape[1] )
@@ -47,8 +50,8 @@ def app():
     with st.expander("Посмотреть общую таблицу"):
         st.dataframe(DataBase_df)
 
-    con_1.write('Обновить таблицу:')
-    con_1.button('Обновить', on_click=LoadDataBase, args=(FolderPath,FileName,ColOption),)
+    con_1 = st.container()
+    # ColOption = st.checkbox('Исключить пустые столбцы')
 
     Date = st.date_input("Укажите дату",datetime.today())
     if not Date:
@@ -97,20 +100,24 @@ def app():
 
         if st.button('Записать'):
             if uploaded_file is not None:
-                with pd.ExcelWriter(FolderPath + FileName, mode="a", engine="openpyxl", if_sheet_exists="overlay",) as writer:
-                    df_to_save.to_excel(writer, sheet_name="Sheet1", startrow=writer.sheets['Sheet1'].max_row, index = False,header= False)
-                    st.success('Данные успешно записаны!')
+                append_df_to_excel(FolderPath + FileName, df_to_save, sheet_name='Sheet1',header=0, index=False)
+                st.success('Данные успешно записаны!')
+
+                # with pd.ExcelWriter(FolderPath + FileName, mode="a", engine="openpyxl", if_sheet_exists="overlay",) as writer:
+                #     df_to_save.to_excel(writer, sheet_name="Sheet1", startrow=writer.sheets['Sheet1'].max_row, index = False,header= False)
+                #     st.success('Данные успешно записаны!')
+
             else:
                 st.warning("Файл не загружен! Загрузите файл...")
 
-        # final_df.to_excel(FolderPath + FileName, sheet_name='Sheet1', index = False)
+        # final_df.to_excel(FolderPath + '\output.xlsx', sheet_name='Sheet1', index = False)
 
         with st.form("form_1"):
             st.write('Выбрать определенный набор данных из загруженной таблицы для просмотра:')
             # if st.checkbox('Выбрать определенный набор данных из загруженной таблицы для просмотра:'):
             Rows = st.multiselect('Выбрать ряды', options=df1.iloc[:,0])
 
-            submitted = st.form_submit_button("Ввести")
+            submitted = st.form_submit_button("Вывести данные")
 
             if submitted:
                 selected_df = df1.loc[df1['Параметр'].isin(Rows)]
