@@ -14,7 +14,7 @@ def app():
     if 'DataBase_df' not in st.session_state:
         st.session_state['DataBase_df'] = {}
 
-    # @st.experimental_memo
+    @st.experimental_memo
     def LoadDataBase(FolderPath,FileName, ColOption):
         DataBase_df = pd.read_excel(FolderPath + FileName, header = 0, parse_dates=['Дата'])
         if ColOption:
