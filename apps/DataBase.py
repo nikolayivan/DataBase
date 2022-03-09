@@ -5,14 +5,11 @@ import pandas as pd
 import plotly.express as px
 
 def app():
-    st.title('Система сбора данных и мониториг 📈')
+    st.title('Система сбора данных и мониторинг 📈')
     st.sidebar.write('')
     st.sidebar.info('About: \n This is a demo version of web application designed to recode and analyse parameters from EPU. All rights belongs to JSC Profotech.')
     FolderPath = r'./data'
     FileName = '/Таблица Данных.xlsx'
-
-    if 'DataBase_df' not in st.session_state:
-        st.session_state['DataBase_df'] = {}
 
     @st.experimental_memo
     def LoadDataBase(FolderPath,FileName, ColOption):
@@ -26,22 +23,21 @@ def app():
     con_1 = st.container()
     ColOption = st.checkbox('Исключить пустые столбцы')
 
-    if not st.session_state['DataBase_df']:
-        DataBase_df = LoadDataBase(FolderPath,FileName, ColOption)
-        DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
-        st.session_state['DataBase_df'] = DataBase_df.to_dict()
-    else:
-        DataBase_df = pd.DataFrame(st.session_state['DataBase_df'])
+    DataBase_df = LoadDataBase(FolderPath,FileName,ColOption)
+    DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
 
-    # with st.form("form_2"):
     st.write("Общее кол-во записей: ", DataBase_df.shape[0] )
     st.write("Общее кол-во столбцов: ", DataBase_df.shape[1] )
 
     with st.expander("Посмотреть общую таблицу"):
-        st.dataframe(DataBase_df)
+        st.dataframe(DataBase_df.tail(10))
 
-    # con_1.write('Обновить таблицу:')
-    # con_1.button('Обновить', on_click=LoadDataBase, args=(FolderPath,FileName,ColOption),)
+    # st.write('Обновить таблицу:')
+    # if st.button('Обновить'):
+    #     LoadDataBase.clear()
+    #     DataBase_df = LoadDataBase(FolderPath,FileName)
+    #     DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
+    #     st.session_state['DataBase_df'] = DataBase_df.to_dict()
 
     Plot_df = DataBase_df
     Plot_df.sort_values('Дата', inplace=True)
@@ -221,7 +217,7 @@ def app():
     selected_df_5 = pd.DataFrame()
 
     for Row in Rows:
-        selected_df_6 = pd.DataFrame()
+        selected_df_6  = pd.DataFrame()
         selected_df_2  = selected_df.loc[selected_df['Данные ЭОБ: Зав. номер трансформатора'].isin([Row]), :]
 
         # st.write(selected_df_2)
@@ -236,16 +232,20 @@ def app():
 
         for Ind, Col in enumerate(selected_df_2.columns):
             if Col == 'Дата':
-                Series = selected_df_2.loc[:,Col]
+                Series = selected_df_2.loc[:,Col].reset_index(drop=True)
                 selected_df_6[Col] = Series.sub(Series.iloc[0]).dt.days
                 # selected_df_6[Col] = selected_df_2.loc[:,Col].sub(selected_df_2.iloc[0,Ind]).dt.days
             elif Col == 'Данные ЭОБ: Зав. номер трансформатора':
-                selected_df_6[Col] = selected_df_2[Col]
+                selected_df_6[Col] = selected_df_2[Col].reset_index(drop=True)
             elif Col == 'Оптические параметры (EOM Фаза А): Част. модуляции':
-                selected_df_6[Col] = selected_df_2[Col]
+                selected_df_6[Col] = selected_df_2[Col].reset_index(drop=True)
             else:
-                Series = selected_df_2.loc[:,Col]
-                selected_df_6[Col] = Series.div(Series.iloc[0])
+                Series = selected_df_2.loc[:,Col].reset_index(drop=True)
+                for i in range(len(Series)):
+                    if not pd.isna(Series.iloc[i]):
+                        selected_df_6[Col] = Series.div(Series.iloc[i])
+                    # else:
+                    #     selected_df_6[Col] = Series.div(Series.iloc[1])
 
         selected_df_5 = pd.concat([selected_df_5, selected_df_6], ignore_index=True)
         selected_df_5.sort_values('Дата', inplace=True)
@@ -282,5 +282,3 @@ def app():
                 xanchor="right",
                 x=1))
         st.plotly_chart(fig2, use_container_width=True)
-
-    # st.markdown("""---""")
