@@ -1,2 +1,2 @@
 [global]
-dataFrameSerialization = "arrow"
+dataFrameSerialization = "legacy"
