@@ -5,6 +5,8 @@ from PIL import Image
 from multiapp import MultiApp
 from apps import DataBase, WriteIn
 
+export STREAMLIT_GLOBAL_DATAFRAMESERIALIZATION = "legacy"
+
 st.set_page_config(page_title = 'Калибровка', layout = 'wide', page_icon = '🔰')
 
 app = MultiApp()
