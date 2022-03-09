@@ -12,6 +12,7 @@ from func.append import append_df_to_excel
 def app():
     st.title('Система сбора данных и мониториг 📈')
     st.sidebar.write('')
+    st.write(pd.__version__)
     st.sidebar.info('About: This is a demo version of web application designed to recode and analyse parameters from EPU. All rights belongs to JSC Profotech.')
     FolderPath = r'./data'
     FileName = '/Таблица Данных.xlsx'
