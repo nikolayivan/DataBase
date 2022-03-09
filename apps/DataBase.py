@@ -6,6 +6,7 @@ import plotly.express as px
 
 def app():
     st.title('Система сбора данных и мониториг 📈')
+    st.write(pd.__version__)
     st.sidebar.write('')
     st.sidebar.info('About: \n This is a demo version of web application designed to recode and analyse parameters from EPU. All rights belongs to JSC Profotech.')
     FolderPath = r'./data'
