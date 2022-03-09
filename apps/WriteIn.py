@@ -91,13 +91,11 @@ def app():
 
             if submitted_1:
                 if uploaded_file is not None:
-                    append_df_to_excel(FolderPath + FileName, df_to_save, sheet_name='Sheet1',header=0, index=False)
-                    st.success('Данные успешно записаны!')
-
-                    # with pd.ExcelWriter(FolderPath + FileName, mode="a", engine="openpyxl", if_sheet_exists="overlay",) as writer:
-                    #     df_to_save.to_excel(writer, sheet_name="Sheet1", startrow=writer.sheets['Sheet1'].max_row, index = False,header= False)
-                    #     st.success('Данные успешно записаны!')
-
+#                     append_df_to_excel(FolderPath + FileName, df_to_save, sheet_name='Sheet1',header=0, index=False)
+#                     st.success('Данные успешно записаны!')
+                    with pd.ExcelWriter(FolderPath + FileName, mode="a", engine="openpyxl", if_sheet_exists="overlay",) as writer:
+                        df_to_save.to_excel(writer, sheet_name="Sheet1", startrow=writer.sheets['Sheet1'].max_row, index = False,header= False)
+                        st.success('Данные успешно записаны!')
                 else:
                     st.warning("Файл не загружен! Загрузите файл...")
 
