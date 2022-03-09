@@ -6,7 +6,6 @@ import plotly.express as px
 
 def app():
     st.title('Система сбора данных и мониториг 📈')
-    st.write(pd.__version__)
     st.sidebar.write('')
     st.sidebar.info('About: \n This is a demo version of web application designed to recode and analyse parameters from EPU. All rights belongs to JSC Profotech.')
     FolderPath = r'./data'
@@ -34,24 +33,25 @@ def app():
     else:
         DataBase_df = pd.DataFrame(st.session_state['DataBase_df'])
 
+    # with st.form("form_2"):
     st.write("Общее кол-во записей: ", DataBase_df.shape[0] )
     st.write("Общее кол-во столбцов: ", DataBase_df.shape[1] )
 
     with st.expander("Посмотреть общую таблицу"):
         st.dataframe(DataBase_df)
 
-    con_1.write('Обновить таблицу:')
-    con_1.button('Обновить', on_click=LoadDataBase, args=(FolderPath,FileName,ColOption),)
+    # con_1.write('Обновить таблицу:')
+    # con_1.button('Обновить', on_click=LoadDataBase, args=(FolderPath,FileName,ColOption),)
 
     Plot_df = DataBase_df
     Plot_df.sort_values('Дата', inplace=True)
 
     with st.form("form_2"):
-        st.write('Анализ данных по выбранному параметру.')
-
+        st.write('Анализ данных по выбранному параметру:')
         con_2 = st.container()
 
-        if st.checkbox('Выбрать все трансформаторы'):
+        if st.checkbox('Выбрать все ЭОБ'):
+
             RowOptionList = list(dict.fromkeys(Plot_df['Данные ЭОБ: Зав. номер трансформатора'].tolist()))
             RowOption = RowOptionList
         else:
@@ -60,7 +60,7 @@ def app():
 
         con_3 = st.container()
 
-        if st.checkbox('Выбрать все столбцы'):
+        if st.checkbox('Выбрать все параметры'):
             ColOptionList = Plot_df.columns.tolist()
             ColOptions = ColOptionList
         else:
@@ -88,13 +88,15 @@ def app():
 
         con_4 = st.container()
 
-        Rows = con_2.multiselect('Выбрать ряды:', options=RowOption , default = RowOptionList)
-        MainColumns = con_3.multiselect('Выбрать основные столбцы:', options=ColOptions, default = ColOptionList)
-        AddColumns = con_4.multiselect('Выбрать дополнительные столбцы:', options=AddColOptions, default = AddColOptions[:2])
+        Rows = con_2.multiselect('Выбрать ЭОБ:', options=RowOption , default = RowOptionList)
+        MainColumns = con_3.multiselect('Выбрать основные параметры:', options=ColOptions, default = ColOptionList)
+        AddColumns = con_4.multiselect('Выбрать дополнительные параметры:', options=AddColOptions, default = AddColOptions[:2])
 
         Columns = MainColumns + AddColumns
 
-        submitted = st.form_submit_button("Ввести")
+        Columns = list(dict.fromkeys(Columns))
+
+        submitted = st.form_submit_button("Ввод")
 
         if submitted:
             pass
@@ -116,8 +118,6 @@ def app():
     datetimes = pd.to_datetime(selected_df["Дата"])
     selected_df["Дата"] = datetimes
     selected_df.sort_values('Дата', inplace=True)
-
-    st.write(selected_df)
 
     # # st.stop()
     #
@@ -165,6 +165,12 @@ def app():
     # st.stop()
 
     # st.line_chart(selected_df)
+    st.header('')
+    st.header('Результаты в абсолютных еденицах')
+
+    with st.expander("Посмотреть результирующую таблицу"):
+        st.dataframe(selected_df)
+
     if Rows:
         if 'Дата' in Columns:
             if len(Columns) >= 2:
@@ -172,15 +178,29 @@ def app():
                 df = selected_df[selected_df['Оптические параметры (EOM Фаза А): Част. модуляции'] < 50 ]
                 if not df.empty:
                     # st.write(df)
-                    st.subheader('Частота модуляции 38 Гц')
+                    st.subheader('Частота модуляции 38 кГц')
                     fig = px.scatter(df, x="Дата", y=MainColumns, hover_name=df['Данные ЭОБ: Зав. номер трансформатора'])
+                    fig.update_layout(legend_title_text=None,
+                            legend=dict(
+                            orientation="h",
+                            yanchor="bottom",
+                            y=1.02,
+                            xanchor="right",
+                            x=1))
                     st.plotly_chart(fig, use_container_width=True)
 
                 df = selected_df[selected_df['Оптические параметры (EOM Фаза А): Част. модуляции'] > 50 ]
                 if not df.empty:
                     # st.write(df)
-                    st.subheader('Частота модуляции 66 Гц')
+                    st.subheader('Частота модуляции 66 кГц')
                     fig = px.scatter(df, x="Дата", y=MainColumns, hover_name=df['Данные ЭОБ: Зав. номер трансформатора'])
+                    fig.update_layout(legend_title_text=None,
+                            legend=dict(
+                            orientation="h",
+                            yanchor="bottom",
+                            y=1.02,
+                            xanchor="right",
+                            x=1))
                     st.plotly_chart(fig, use_container_width=True)
 
                 # marginal_y="violin",
@@ -230,17 +250,37 @@ def app():
         selected_df_5 = pd.concat([selected_df_5, selected_df_6], ignore_index=True)
         selected_df_5.sort_values('Дата', inplace=True)
 
+
+    st.header('')
+    st.header('Результаты в относительных еденицах')
+
     with st.expander('Показать таблицу'):
         st.write(selected_df_5)
 
     df = selected_df_5[selected_df_5['Оптические параметры (EOM Фаза А): Част. модуляции'] < 50]
     if not df.empty:
-        st.subheader('Частота модуляции 38 Гц')
+        st.subheader('Частота модуляции 38 кГц')
         fig2 = px.scatter(df, x='Дата', y=MainColumns, hover_name='Данные ЭОБ: Зав. номер трансформатора')
+        fig2.update_layout(legend_title_text=None,
+                legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1))
         st.plotly_chart(fig2, use_container_width=True)
 
     df = selected_df_5[selected_df_5['Оптические параметры (EOM Фаза А): Част. модуляции'] > 50]
     if not df.empty:
-        st.subheader('Частота модуляции 66 Гц')
+        st.subheader('Частота модуляции 66 кГц')
         fig2 = px.scatter(df, x='Дата', y=MainColumns, hover_name='Данные ЭОБ: Зав. номер трансформатора')
+        fig2.update_layout(legend_title_text=None,
+                legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1))
         st.plotly_chart(fig2, use_container_width=True)
+
+    # st.markdown("""---""")
