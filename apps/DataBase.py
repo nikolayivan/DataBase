@@ -162,7 +162,7 @@ def app():
 
     # st.line_chart(selected_df)
     st.header('')
-    st.header('Результаты в абсолютных еденицах')
+    st.header('Результаты в абсолютных единицах')
 
     with st.expander("Посмотреть результирующую таблицу"):
         st.dataframe(selected_df)
@@ -252,7 +252,7 @@ def app():
 
 
     st.header('')
-    st.header('Результаты в относительных еденицах')
+    st.header('Результаты в относительных единицах')
 
     with st.expander('Показать таблицу'):
         st.write(selected_df_5)
