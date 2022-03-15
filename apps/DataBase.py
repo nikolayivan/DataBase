@@ -28,7 +28,7 @@ def app():
             DataBase_df.dropna(how='all', axis=1, inplace=True)
         return DataBase_df
 
-    con_1 = st.container()
+    con1 = st.container()
     
     st.write('Обновить таблицу:')
     if st.button('Обновить'):
