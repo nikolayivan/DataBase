@@ -28,6 +28,8 @@ def app():
             DataBase_df.dropna(how='all', axis=1, inplace=True)
         return DataBase_df
 
+    con_1 = st.container()
+    
     st.write('Обновить таблицу:')
     if st.button('Обновить'):
         LoadDataBase.clear()
@@ -35,7 +37,9 @@ def app():
         DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
         # st.session_state['DataBase_df'] = DataBase_df.to_dict()
 
-    con_1 = st.container()
+    con1.write(f"Общее кол-во записей: `{DataBase_df.shape[0]}`")
+    con1.write(f"Общее кол-во столбцов: `{DataBase_df.shape[1]}`" )
+    
     # ColOption = st.checkbox('Исключить пустые столбцы')
     ColOption = False
     DataBase_df = LoadDataBase(FolderPath,FileName,ColOption)
