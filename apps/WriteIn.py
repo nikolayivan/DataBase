@@ -8,6 +8,7 @@ from datetime import datetime
 def app():
     st.title('Система сбора данных и мониторинг 📈')
     st.sidebar.write('')
+#     st.sidebar.info('About: \n This is a demo version of web application designed to recode and analyse parameters from EPU. All rights belongs to JSC Profotech.')
     FolderPath = r'./data'
     FileName = '/DataBase.db'
 #     FileName = '/Таблица Данных.xlsx'
