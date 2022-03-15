@@ -45,14 +45,6 @@ def app():
     con1.write(f"Общее кол-во записей: `{DataBase_df.shape[0]}`")
     con1.write(f"Общее кол-во столбцов: `{DataBase_df.shape[1]}`" )
     
-    # ColOption = st.checkbox('Исключить пустые столбцы')
-    ColOption = False
-    DataBase_df = LoadDataBase(FolderPath,FileName,ColOption)
-    DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
-
-    st.write("Общее кол-во записей: ", DataBase_df.shape[0] )
-    st.write("Общее кол-во столбцов: ", DataBase_df.shape[1] )
-
     col1, _ = st.columns([1,5])
     Number = col1.number_input('Укажите кол-во строк для отображения:', value=5)
     # st.write('Показать последние 10 записей из общей таблицы:')
