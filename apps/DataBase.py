@@ -14,7 +14,7 @@ def app():
 
     @st.experimental_memo
     def LoadDataBase(FolderPath,FileName, ColOption):
-        con = sqlite3.connect(r'C:\Users\testingcenter\Documents\StreamlitApps\006_DataBase\data\DataBase.db')
+        con = sqlite3.connect(FolderPath + FileName)
         cur = con.cursor()
         DataBase_df = pd.read_sql('SELECT * FROM data', con, parse_dates=['Дата'])
         con.close()
