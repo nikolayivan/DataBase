@@ -8,36 +8,57 @@ from datetime import datetime
 def app():
     st.title('Система сбора данных и мониторинг 📈')
     st.sidebar.write('')
-    st.sidebar.info('About: This is a demo version of web application designed to recode and analyse parameters from EPU. All rights belongs to JSC Profotech.')
     FolderPath = r'./data'
-    FileName = '/Таблица Данных.xlsx'
+    FileName = '/DataBase.db'
+#     FileName = '/Таблица Данных.xlsx'
 
     @st.experimental_memo
     def LoadDataBase(FolderPath,FileName):
-        DataBase_df = pd.read_excel(FolderPath + FileName, header = 0, parse_dates=['Дата'])
+        con = sqlite3.connect(FolderPath + FileName)
+        cur = con.cursor()
+        DataBase_df = pd.read_sql('SELECT * FROM data', con, parse_dates=['Дата'])
+        con.close()
+        # DataBase_df = pd.read_excel(FolderPath + FileName, header = 0, parse_dates=['Дата'])
+        DataBase_df["Дата"] = DataBase_df["Дата"].dt.date
         return DataBase_df
 
+    def DeleteRow(ID):
+        con = sqlite3.connect(FolderPath + FileName)
+        con.execute("DELETE FROM data WHERE id=(%s)" % ID)
+        con.commit()
+        con.close()
+        st.success('Ряд успешно удален!')
 
     DataBase_df = LoadDataBase(FolderPath,FileName)
-    DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
+    # DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
+    con1 = st.container()
 
     st.write('Обновить таблицу:')
     if st.button('Обновить'):
         LoadDataBase.clear()
         DataBase_df = LoadDataBase(FolderPath,FileName)
-        DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
-        st.session_state['DataBase_df'] = DataBase_df.to_dict()
+        # DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
+        # st.session_state['DataBase_df'] = DataBase_df.to_dict()
 
-    st.write("Общее кол-во записей: ", DataBase_df.shape[0] )
-    st.write("Общее кол-во столбцов: ", DataBase_df.shape[1] )
+    con1.write(f"Общее кол-во записей: `{DataBase_df.shape[0]}`")
+    con1.write(f"Общее кол-во столбцов: `{DataBase_df.shape[1]}`" )
 
-    st.write('Показать последние 10 записей из общей таблицы:')
+    # con1.write('FFF `{}` ')
+    col1, _ = st.columns([1,5])
+
+    Number = col1.number_input('Укажите кол-во строк для отображения:', value=5)
+
+    # st.write('Показать последние 10 записей из общей таблицы:')
     with st.expander("Посмотреть таблицу"):
-        st.dataframe(DataBase_df.tail(10))
+        st.dataframe(DataBase_df.tail(Number))
+
+    col1, _ = st.columns([1,5])
+    ID = col1.number_input('Укажите id для удаления:', value=0)
+    if st.button('Удалить'):
+        DeleteRow(ID)
 
     con_1 = st.container()
     # ColOption = st.checkbox('Исключить пустые столбцы')
-
     uploaded_file = st.file_uploader("Загрузить файл")
 
     if uploaded_file is not None:
@@ -91,16 +112,24 @@ def app():
 
             if submitted_1:
                 if uploaded_file is not None:
-#                     append_df_to_excel(FolderPath + FileName, df_to_save, sheet_name='Sheet1',header=0, index=False)
-#                     st.success('Данные успешно записаны!')
-                    with pd.ExcelWriter(FolderPath + FileName, mode="a", engine="openpyxl", if_sheet_exists="overlay",) as writer:
-                        df_to_save.to_excel(writer, sheet_name="Sheet1", startrow=writer.sheets['Sheet1'].max_row, index = False,header= False)
-                        st.success('Данные успешно записаны!')
+                    con = sqlite3.connect(FolderPath + FileName)
+                    df_to_save["Дата"] = df_to_save["Дата"].astype(str)
+                    df_to_save.replace(np.nan, None, inplace=True)
+                    df_to_save.replace(' ', None, inplace=True)
+                    to_save = tuple(df_to_save.iloc[0,:])
+                    row_value_markers = ','.join(['?']*len(to_save))
+                    con.execute("INSERT INTO data VALUES (%s)" % row_value_markers, to_save)
+                    con.commit()
+                    con.close()
+                    # append_df_to_excel(FolderPath + FileName, df_to_save, sheet_name='Sheet1',header=0, index=False)
+                    # st.success('Данные успешно записаны!')
+                    # with pd.ExcelWriter(FolderPath + FileName, mode="a", engine="openpyxl", if_sheet_exists="overlay",) as writer:
+                    #     df_to_save.to_excel(writer, sheet_name="Sheet1", startrow=writer.sheets['Sheet1'].max_row, index = False,header= False)
+                    st.success('Данные успешно записаны!')
                 else:
                     st.warning("Файл не загружен! Загрузите файл...")
 
         # final_df.to_excel(FolderPath + '\output.xlsx', sheet_name='Sheet1', index = False)
-
 
         if st.checkbox('Поиск данных'):
             with st.form("form_2"):
@@ -115,3 +144,11 @@ def app():
 
             if Rows:
                 st.write(selected_df)
+
+    if not DataBase_df.empty:
+        # st.write('Сохранить на локальный диск:')
+        st.download_button(
+                label="Скачать CSV",
+                data=DataBase_df.to_csv().encode('utf-8'),
+                file_name='Таблица Данных.csv',
+                mime='text/csv')
