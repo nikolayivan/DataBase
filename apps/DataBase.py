@@ -28,6 +28,11 @@ def app():
             DataBase_df.dropna(how='all', axis=1, inplace=True)
         return DataBase_df
 
+    
+    ColOption = False
+    DataBase_df = LoadDataBase(FolderPath,FileName,ColOption)
+    DataBase_df.sort_values('Дата', inplace=True, ignore_index=True)
+    
     con1 = st.container()
     
     st.write('Обновить таблицу:')
