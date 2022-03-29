@@ -247,6 +247,12 @@ def app():
             OptionName = 'серийный номер'
             Selected_df = df1[df1['серийный номер'] == Option ]
             Selected_df.set_index('дата', inplace=True)
+            
+        elif OptionList == 'По принадлежности':
+            Option = st.selectbox('Список проектов:', options = df1['Принадлежность'].drop_duplicates())
+            OptionName = 'Принадлежность'
+            Selected_df = df1[df1['Принадлежность'] == Option ]
+            Selected_df.set_index('серийный номер', inplace=True)
 
     # SNName = st.selectbox('Серийные номера', options = df1['серийный номер'].drop_duplicates())
     # st.stop()
