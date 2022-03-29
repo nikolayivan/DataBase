@@ -17,7 +17,7 @@ def app():
     def LoadDataBase(FolderPath,FileName):
         con = sqlite3.connect(FolderPath + FileName)
         cur = con.cursor()
-        DataBase_df = pd.read_sql('SELECT * FROM Data_TT', con, parse_dates=['Дата'])
+        DataBase_df = pd.read_sql('SELECT * FROM data', con, parse_dates=['Дата'])
         st.session_state['DataBase_df_id'] = DataBase_df.index[-1]
         con.close()
         # DataBase_df = pd.read_excel(FolderPath + FileName, header = 0, parse_dates=['Дата'])
