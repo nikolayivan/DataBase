@@ -5,7 +5,7 @@ from PIL import Image
 from multiapp import MultiApp
 from apps import DataBase, WriteIn, Mapping
 
-st.set_page_config(page_title = 'Калибровка', layout = 'wide', page_icon = '🔰')
+st.set_page_config(page_title = 'База данных - Profotech', layout = 'wide', page_icon = '🔰')
 
 app = MultiApp()
 
