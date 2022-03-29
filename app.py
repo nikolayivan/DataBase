@@ -34,9 +34,9 @@ with st.sidebar:
     #     st.stop()
 
 # Add all your application here
-app.add_app("Запись новых данных", WriteIn.app)
-app.add_app("Анализ данных", DataBase.app)
 app.add_app("Карта", Mapping.app)
+app.add_app("Анализ данных", DataBase.app)
+app.add_app("Запись новых данных", WriteIn.app)
 
 # The main app
 app.run()
