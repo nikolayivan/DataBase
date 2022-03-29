@@ -227,7 +227,7 @@ def app():
 
     col1, col2 = st.columns(2)
     with col1:
-        OptionList = st.selectbox('Осуществить поиск по: ', options = ['По проекту', 'По наименованию ПС', 'По сер.№'])
+        OptionList = st.selectbox('Осуществить поиск по: ', options = ['По проекту', 'По наименованию ПС', 'По сер.№', 'По принадлежности'])
 
     with col2:
         if OptionList == 'По проекту':
