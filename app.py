@@ -1,19 +1,23 @@
 import streamlit as st
-# import streamlit_authenticator as stauth
+import streamlit_authenticator as stauth
 from PIL import Image
 
 from multiapp import MultiApp
-from apps import DataBase, WriteIn, Mapping
+from apps import Mapping, Analysis
 
-st.set_page_config(page_title = 'База данных - Profotech', layout = 'wide', page_icon = '🔰')
 
+st.set_page_config(page_title = 'Реектор ЦПС', layout = 'wide', page_icon = '📈')
+st.title('Реестор Цифровых ПС в ПАО "Россети"')
 app = MultiApp()
 
 with st.sidebar:
-    image = Image.open(r'./img/logo-en.png')
-    st.image(image)
+    ImgPath = './img'
+    image1 = Image.open(ImgPath + '/' + 'rosseti_logo.png')
+    image2 = Image.open(ImgPath + '/' + 'skoltech_logo.png')
+    col1, col2 = st.columns(2)
+    col1.image(image1)
+    col2.image(image2)
 
-    # st.info('About: This web application ...')
     # names = ['123']
     # usernames = ['123']
     # passwords = ['123']
@@ -27,16 +31,15 @@ with st.sidebar:
     #     st.write('Вы вошли как: *%s*' % (name))
     #     # st.sidebar.title('Some content')
     # elif authentication_status == False:
-    #     st.error('Логин/пароль неверны')
+    #     st.error('Username/password is incorrect')
     #     st.stop()
     # elif authentication_status == None:
-    #     st.warning('Укажите свой логин и пароль')
+    #     st.warning('Please enter your username and password')
     #     st.stop()
 
 # Add all your application here
-app.add_app("Карта", Mapping.app)
-app.add_app("Анализ данных", DataBase.app)
-app.add_app("Запись новых данных", WriteIn.app)
+app.add_app("Реестор ЦПС", Mapping.app)
+app.add_app("Анализ ЦПС", Analysis.app)
 
 # The main app
 app.run()
