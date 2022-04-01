@@ -552,6 +552,7 @@ def app():
     st.write('')
     st.markdown('---')
     st.subheader('Кол-во ЦПС по категориям')
+    col0, col1 = st.columns(2)
     with col0:
         with st.expander("По классу напряжения:"):
             # st.write('По классу напряжения:')
