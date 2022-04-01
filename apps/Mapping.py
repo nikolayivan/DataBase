@@ -552,19 +552,21 @@ def app():
     st.write('')
     st.markdown('---')
     st.subheader('Кол-во ЦПС по категориям')
-    col0, col1 = st.columns(2)
     with col0:
-        st.write('По классу напряжения:')
-        st_echarts(options=option_1)
-
-        st.write('По типу архитектуры:')
-        st_echarts(options=option_2)
+        with st.expander("По классу напряжения:"):
+            # st.write('По классу напряжения:')
+            st_echarts(options=option_1)
+        with st.expander("По типу архитектуры:"):
+        # st.write('По типу архитектуры:')
+            st_echarts(options=option_2)
     with col1:
-        st.write('По ДЗО ПАО "Россети:')
-        st_echarts(options=option_4)
+        with st.expander('По ДЗО ПАО "Россети":'):
+        # st.write('По ДЗО ПАО "Россети:')
+            st_echarts(options=option_4)
 
-        st.write('По стадии реализации:')
-        st_echarts(options=option_3)
+        with st.expander("По стадии реализации:"):
+        # st.write('По стадии реализации:')
+            st_echarts(options=option_3)
 
     st.markdown('---')
 
