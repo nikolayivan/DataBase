@@ -38,7 +38,7 @@ with st.sidebar:
     #     st.stop()
 
 # Add all your application here
-app.add_app("Реестор ЦПС", Mapping.app)
+# app.add_app("Реестор ЦПС", Mapping.app)
 app.add_app("Анализ ЦПС", Analysis.app)
 
 # The main app
