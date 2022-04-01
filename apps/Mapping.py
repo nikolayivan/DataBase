@@ -57,7 +57,7 @@ def app():
         folium_static(m)
 
 
-    df1 = pd.read_excel(r'C:\Users\testingcenter\Documents\StreamlitApps\008_Rosseti\data\Реестор ЦПС.xlsx',
+    df1 = pd.read_excel('./data/Реестор ЦПС.xlsx',
                     sheet_name='Sheet1',
                     header=0, parse_dates=['Дата ввода в эксплуатацию']
                     )
