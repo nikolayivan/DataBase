@@ -3,7 +3,7 @@ import streamlit as st
 from PIL import Image
 
 from multiapp import MultiApp
-from apps import Mapping, Analysis, DataBase
+from apps import Mapping, Analysis
 
 
 st.set_page_config(page_title = 'Рееcтор ЦПС', layout = 'wide', page_icon = '📈')
@@ -38,7 +38,7 @@ with st.sidebar:
     #     st.stop()
 
 # Add all your application here
-app.add_app("Реестор ЦПС", DataBase.app)
+app.add_app("Реестор ЦПС", Mapping.app)
 app.add_app("Анализ ЦПС", Analysis.app)
 
 # The main app
