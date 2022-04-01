@@ -361,7 +361,7 @@ def app():
         'trigger': 'item'
       },
       'legend': {
-        'top': '5%',
+        'top': '85%',
         'left': 'center'
       },
       'series': [
@@ -417,7 +417,7 @@ def app():
         'trigger': 'item'
       },
       'legend': {
-        'top': '5%',
+        'top': '85%',
         'left': 'center'
       },
       'series': [
@@ -460,7 +460,7 @@ def app():
         'trigger': 'item'
       },
       'legend': {
-        'top': '5%',
+        'top': '85%',
         'left': 'center'
       },
       'series': [
@@ -504,7 +504,7 @@ def app():
         'trigger': 'item'
       },
       'legend': {
-        'top': '5%',
+        'top': '85%',
         'left': 'center'
       },
       'series': [
