@@ -6,12 +6,12 @@ from multiapp import MultiApp
 from apps import Mapping, Analysis
 
 
-st.set_page_config(page_title = 'Реектор ЦПС', layout = 'wide', page_icon = '📈')
+st.set_page_config(page_title = 'Рееcтор ЦПС', layout = 'wide', page_icon = '📈')
 st.title('Реестор Цифровых ПС в ПАО "Россети"')
 app = MultiApp()
 
 with st.sidebar:
-    ImgPath = './img'
+    ImgPath = r'./img'
     image1 = Image.open(ImgPath + '/' + 'rosseti_logo.png')
     image2 = Image.open(ImgPath + '/' + 'skoltech_logo.png')
     col1, col2 = st.columns(2)
