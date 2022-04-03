@@ -412,6 +412,7 @@ def app():
                 st.write('')
                 st.write('')
                 st.write('')
+                st.write('')
 
     option_1 = {
       'tooltip': {
