@@ -378,31 +378,34 @@ def app():
         };
 
     col0, col1 = st.columns(2)
-    with st.expander("Карты:",expanded=True):
-        with col0:
-            if not Selected_df.empty:
-                # with st.expander("See explanation", expanded=True):
-                FoliumMap(Selected_df, Option,OptionName, AddOptions)
-            else:
-                # with st.expander("See explanation", expanded=True):
-                FoliumMap(df1, Option=[],OptionName=[], AddOptions=AddOptions)
-                # col1.subheader('Кол-во ЦПС по годам:')
     
-    with st.expander("Аналитика:",expanded=True):
-        with col1:
-            if not Selected_df.empty:
+    with col0:
+        if not Selected_df.empty:
+            # with st.expander("See explanation", expanded=True):
+            with st.expander("Карты:",expanded=True):
+                FoliumMap(Selected_df, Option,OptionName, AddOptions)
+        else:
+            # with st.expander("See explanation", expanded=True):
+            with st.expander("Карты:",expanded=True):
+                FoliumMap(df1, Option=[],OptionName=[], AddOptions=AddOptions)
+            # col1.subheader('Кол-во ЦПС по годам:')
+    
+    
+    with col1:
+        if not Selected_df.empty:
+            with st.expander("Аналитика:",expanded=True):
                 with st.expander("Посмотреть таблицу"):
                     Grid_table = AgGrid(Selected_df[['Дата ввода в эксплуатацию','ДЗО ПАО Россети','Наименование ПС','Архитектура построения ПС','Стадия реализации','Производитель РЗА']], key='1' ,gridOptions=gridoptions, update_mode=GridUpdateMode.SELECTION_CHANGED, height=250, theme = 'streamlit')
                     # st.write(Selected_df[['Дата ввода в эксплуатацию','ДЗО ПАО Россети','Наименование ПС','Архитектура построения ПС','Стадия реализации','Производитель РЗА']])
                 st_echarts(options=option_6)
 
-            else:
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st.write('')
-                st_echarts(options=option_5)
+                else:
+                    st.write('')
+                    st.write('')
+                    st.write('')
+                    st.write('')
+                    st.write('')
+                    st_echarts(options=option_5)
 
     option_1 = {
       'tooltip': {
