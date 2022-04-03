@@ -14,8 +14,9 @@ with st.sidebar:
     ImgPath = r'./img'
     image1 = Image.open(ImgPath + '/' + 'rosseti_logo.png')
     image2 = Image.open(ImgPath + '/' + 'skoltech_logo.png')
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([7,3])
     col1.image(image1)
+    col1, col2 = st.columns([3,7])
     col2.image(image2)
 
     # names = ['123']
