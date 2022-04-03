@@ -31,11 +31,11 @@ def app():
 
     def FoliumMap(df1,Option,OptionName,AddOptions):
 
-        if not OptionName:
-            OptionName = 'Наименование ПС'
+#         if not OptionName:
+#             OptionName = 'Наименование ПС'
 
-        if df1[OptionName].nunique() != 1:
-            m = folium.Map(location=[63, 77], zoom_start=3.25)
+#         if df1[OptionName].nunique() != 1:
+        m = folium.Map(location=[63, 77], zoom_start=3.25)
 
         dic = {
             10:'darkblue',
