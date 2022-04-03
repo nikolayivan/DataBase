@@ -399,13 +399,14 @@ def app():
                     # st.write(Selected_df[['Дата ввода в эксплуатацию','ДЗО ПАО Россети','Наименование ПС','Архитектура построения ПС','Стадия реализации','Производитель РЗА']])
                 st_echarts(options=option_6)
 
-                else:
-                    st.write('')
-                    st.write('')
-                    st.write('')
-                    st.write('')
-                    st.write('')
-                    st_echarts(options=option_5)
+        else:
+            with st.expander("Аналитика:",expanded=True):
+                st.write('')
+                st.write('')
+                st.write('')
+                st.write('')
+                st.write('')
+                st_echarts(options=option_5)
 
     option_1 = {
       'tooltip': {
