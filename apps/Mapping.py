@@ -2,36 +2,40 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 # import os
-import plotly.express as px
-import plotly.graph_objects as go
+# import plotly.express as px
+# import plotly.graph_objects as go
+
 import folium
+from folium import plugins
+from folium.plugins import HeatMap
+from folium.plugins import MarkerCluster
+
+from streamlit_folium import folium_static
+import leafmap.foliumap as leafmap
+
+from streamlit_echarts import st_echarts
 
 from collections import Counter
-from streamlit_folium import folium_static
-from streamlit_echarts import st_echarts
+
 from PIL import Image
 from datetime import datetime, date
 from st_aggrid import AgGrid, GridUpdateMode
 from st_aggrid.grid_options_builder import GridOptionsBuilder
+
+
 
 def app():
     # st.sidebar.subheader('Описание:')
     # with st.sidebar.expander("Описание"):
     st.info('Приложение предназначено для анализа развития Цифровых ПС в компании [ПАО «Россети»](https://rosseti.ru). Приложение выполнено в рамках образовательной программы «Лидеры энергетики» совместно с [Skoltech](https://www.skoltech.ru/?lang=ru).')
 
-    def FoliumMap(df1,Option,OptionName):
+    def FoliumMap(df1,Option,OptionName,AddOptions):
 
         if not OptionName:
             OptionName = 'Наименование ПС'
 
         if df1[OptionName].nunique() != 1:
-            m = folium.Map(location=[62.886851, 66.849525], zoom_start=3)
-        else:
-            m = folium.Map(location=[float(df1[df1[OptionName] == Option][['lat']].iloc[0]), float(df1[df1[OptionName] == Option][['lon']].iloc[0])], zoom_start=3)
-
-        colors = ["#c85cdb","#5cc6db","#67db5c","#dbbd5c","#db5c5c"]
-        voltages = [10, 35, 110, 220, 330, 500]
-        colors_list = []
+            m = folium.Map(location=[63, 77], zoom_start=3.25)
 
         dic = {
             10:'darkblue',
@@ -41,12 +45,41 @@ def app():
             330:'blue',
             500:'darkgreen'}
 
-        for i in range(len(df1)):
-            folium.Marker(
-                 location=[df1.iloc[i]['lat'], df1.iloc[i]['lon']],
-                 popup=df1.iloc[i]['Наименование ПС'],
-                 icon=folium.Icon(color=str(dic[df1.iloc[i]['Класс напряжения, кВ']]))
-              ).add_to(m)
+        HeatMapData = []
+        Locations = []
+        for x,y,w in zip(df1['lat'],df1['lon'],df1['Класс напряжения, кВ']):
+            HeatMapData.append([x,y,w])
+            Locations.append([str(x),str(y)])
+
+        if 'По классу напряжения' in AddOptions:
+            for i in range(len(df1)):
+                folium.Marker(
+                     location=[df1.iloc[i]['lat'], df1.iloc[i]['lon']],
+                     popup=df1.iloc[i]['Наименование ПС'],
+                     icon=folium.Icon(color=str(dic[df1.iloc[i]['Класс напряжения, кВ']])),
+                  ).add_to(m)
+            # folium.LayerControl().add_to(m)
+
+        elif 'Тепловая карта' in AddOptions:
+            HeatMap(data=HeatMapData).add_to(m)
+            # HeatMap(data=list(zip(df1['lat'].values, df1['lon'].values, df1['Класс напряжения, кВ'].values ))).add_to(m)
+            # folium.LayerControl().add_to(m)
+
+        elif 'Кластеризация' in AddOptions:
+            # FastMarkerCluster(data=list(zip(df1['lat'].values, df1['lon'].values))).add_to(m)
+            # folium.LayerControl().add_to(m)
+            # MarkerCluster(locations=Locations)
+            mc = MarkerCluster()
+            for index, row in df1.iterrows():
+               mc.add_child(folium.Marker(location=[str(row['lat']),str(row['lon'])],
+               popup=row['Наименование ПС'],
+               # tooltip="Put anything you want here!",
+               icon=folium.Icon(color=dic[row['Класс напряжения, кВ']], icon="info-sign", clustered_marker=True)))
+
+               # folium.Circle(location=[str(row['Lat']), str(row['Long_'])],   color='Red', fill=True, fill_color='Red',
+               #            radius=int(row['Confirmed']) * 30).add_to(m)
+            m.add_child(mc)
+
 
         # folium.Marker(
         #     location=[55.70875238638579, 37.72187262683586],
@@ -93,6 +126,7 @@ def app():
 
     # st.write(f'Всего в России {df1.shape[0]} ЦПС из которых {a} введены в работу, {b} находяться на стадии СМР, {c} на стадии ПИР и оставщиеся {d} на ОПЭ.')
 
+
     st.metric(label="Всего ЦПС:", value=df1.shape[0])
 
     st.write('Кол-во ЦПС по классу напряжения:')
@@ -126,39 +160,49 @@ def app():
 
     st.markdown('---')
 
+    AddOptions = []
     col1, col2 = st.columns(2)
     with col1:
         OptionList = st.selectbox('Осуществить поиск по категории: ', options = ['Все ЦПС','ДЗО ПАО Россети', 'По наименованию ПС', 'По классу напряжения', 'По архитектуре', 'Стадия реализации'])
 
     with col2:
-        if OptionList == 'ДЗО ПАО Россети':
+        if OptionList == 'Все ЦПС':
+            AddOptions = st.selectbox('Варианты отображения:', options = ['По классу напряжения','Тепловая карта','Кластеризация'])
+
+        elif OptionList == 'ДЗО ПАО Россети':
+            AddOptions = 'По классу напряжения'
             OptionName = 'ДЗО ПАО Россети'
-            Option = st.selectbox('Список ДЗО ПАО Россети:', options = df1[OptionName].drop_duplicates())
-            Selected_df = df1[df1[OptionName] == Option ]
+            Option = st.multiselect('Список ДЗО ПАО Россети:', options = df1[OptionName].drop_duplicates())
+            Selected_df = df1[df1[OptionName].isin(Option) ]
             # Selected_df.set_index('серийный номер', inplace=True)
 
         elif OptionList == 'По наименованию ПС':
+            AddOptions = 'По классу напряжения'
             OptionName = 'Наименование ПС'
-            Option = st.selectbox('Список ПС:', options = df1[OptionName].drop_duplicates() )
-            Selected_df = df1[df1[OptionName] == Option ]
+            Option = st.multiselect('Список ПС:', options = df1[OptionName].drop_duplicates() )
+            # Selected_df = df1[df1[OptionName] == Option ]
+            Selected_df = df1[df1[OptionName].isin(Option) ]
             # Selected_df.set_index('серийный номер', inplace=True)
 
         elif OptionList == 'По классу напряжения':
+            AddOptions = 'По классу напряжения'
             OptionName = 'Класс напряжения, кВ'
-            Option = st.selectbox('Список напряжений:', options = df1[OptionName].drop_duplicates() )
-            Selected_df = df1[df1[OptionName] == Option ]
+            Option = st.multiselect('Список напряжений:', options = df1[OptionName].drop_duplicates().sort_values() )
+            Selected_df = df1[df1[OptionName].isin(Option) ]
             # Selected_df.set_index('дата', inplace=True)
 
         elif OptionList == 'По архитектуре':
+            AddOptions = 'По классу напряжения'
             OptionName = 'Архитектура построения ПС'
-            Option = st.selectbox('Список проектов:', options =['II','III','IV'] )
-            Selected_df = df1[df1[OptionName] == Option ]
+            Option = st.multiselect('Список проектов:', options =['II','III','IV'] )
+            Selected_df = df1[df1[OptionName].isin(Option)]
             # Selected_df.set_index('серийный номер', inplace=True)
 
         elif OptionList == 'Стадия реализации':
+            AddOptions = 'По классу напряжения'
             OptionName = 'Стадия реализации'
-            Option = st.selectbox('Список проектов:', options = df1[OptionName].drop_duplicates())
-            Selected_df = df1[df1[OptionName] == Option ]
+            Option = st.multiselect('Список проектов:', options = df1[OptionName].drop_duplicates())
+            Selected_df = df1[df1[OptionName].isin(Option) ]
             # Selected_df.set_index('серийный номер', inplace=True)
         else:
             pass
@@ -212,7 +256,7 @@ def app():
     'title': {
         'top': '0%',
         'left': 'center',
-        'text': 'Кол-во ЦПС по классу напряжения в годах'
+        'text': 'Кол-во ЦПС по классу напряжения'
       },
       'tooltip': {
         'trigger': 'axis',
@@ -336,9 +380,11 @@ def app():
     col0, col1 = st.columns(2)
     with col0:
         if not Selected_df.empty:
-            FoliumMap(Selected_df, Option,OptionName)
+            # with st.expander("See explanation", expanded=True):
+            FoliumMap(Selected_df, Option,OptionName, AddOptions)
         else:
-            FoliumMap(df1, Option=[],OptionName=[])
+            # with st.expander("See explanation", expanded=True):
+            FoliumMap(df1, Option=[],OptionName=[], AddOptions=AddOptions)
             # col1.subheader('Кол-во ЦПС по годам:')
 
     with col1:
@@ -571,42 +617,7 @@ def app():
 
     st.markdown('---')
 
-    # Path = r'C:\Users\testingcenter\Documents\StreamlitApps\008_Rosseti\img2'
-    # ListOfImage = []
-    # for filename in os.listdir(Path):
-    #     image = Image.open(Path + '\\' + filename)
-    #     ListOfImage.append(image)
-    #     # st.image(image)
-    #
-    # n_cols = 8
-    # n_rows = 1 + len(ListOfImage) // int(n_cols)
-    # rows = [st.container() for _ in range(n_rows)]
-    # cols_per_row = [r.columns(n_cols) for r in rows]
-    # cols = [column for row in cols_per_row for column in row]
-    #
-    # for image_index, image in enumerate(ListOfImage):
-    #     cols[image_index].image(image)
-
-    # with col2:
-    #     st.write('Стадии реализации')
-    #     st_echarts(options=option_3)
-
-
-    # df1.to_excel(r'C:\Users\testingcenter\Downloads\map.xlsx')
-
-    # with col2:
-
-    # SNName = st.selectbox('Серийные номера', options = df1['серийный номер'].drop_duplicates())
-    # st.stop()
-
-    # col1, col2 = st.columns(2)
-    # with col1:
-    #     st.write(Selected_df.groupby(level=0).first()[['название проекта','Наименование ПС','Класс напряжения', 'тип ЭОБ']])
-    # with col2:
-    #     if 'Folium' in MapOption:
-    #         FoliumMap(Selected_df,Option,OptionName)
-    #     elif 'Scattergeo with trace' in MapOption:
-    #         pass
-    #         # ScattergeoWithTraceMap(Selected_df)
-    #     elif 'Scattergeo' in MapOption:
-    #         ScattergeoMap(Selected_df)
+    m = leafmap.Map(center=(62,66), zoom=3.25)
+    col1, col2 = st.columns(2)
+    with col1:
+        m.to_streamlit(height=0)
