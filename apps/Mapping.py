@@ -187,7 +187,7 @@ def app():
         elif OptionList == 'По классу напряжения':
             AddOptions = 'По классу напряжения'
             OptionName = 'Класс напряжения, кВ'
-            Option = st.multiselect('Список напряжений:', options = df1[OptionName].drop_duplicates().sort_values() )
+            Option = st.multiselect('Список напряжений, кВ:', options = df1[OptionName].drop_duplicates().sort_values() )
             Selected_df = df1[df1[OptionName].isin(Option) ]
             # Selected_df.set_index('дата', inplace=True)
 
