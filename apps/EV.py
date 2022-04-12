@@ -344,10 +344,10 @@ def app():
         col1,col2,col3 = st.columns(3)
 
         with col1:
-            S_upper_limit = st.number_input('Ограничение по установленной мощности ПС', min_value=None, max_value=None, value=570)
+            S_upper_limit = st.number_input('Ограничение по установленной мощности ПС, кВА', min_value=None, max_value=None, value=570)
             S_upper_upper_limit = 1.035*S_upper_limit
         with col2:
-            n_EVs = st.number_input('Кол-во EVs', min_value=None, max_value=None, value=10)
+            n_EVs = st.number_input('Кол-во EVs, шт', min_value=None, max_value=None, value=10)
         with col3:
             P_max = st.number_input('Максимальная мощность зарядки EV, кВт', help='Одно значение для всех EV', min_value=None, max_value=None, value=3.6) # kW - max мощность зарядки EV
 
