@@ -6,8 +6,8 @@ from multiapp import MultiApp
 from apps import Mapping, Analysis, EV
 
 
-st.set_page_config(page_title = 'Рееcтор ЦПС', layout = 'wide', page_icon = '📈')
-st.title('Реестор Цифровых ПС в ПАО "Россети"')
+st.set_page_config(page_title = 'Россети - Skoltech', layout = 'wide', page_icon = '📈')
+# st.title('Реестор Цифровых ПС в ПАО "Россети"')
 app = MultiApp()
 
 with st.sidebar:
