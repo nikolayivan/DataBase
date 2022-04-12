@@ -321,8 +321,8 @@ def app():
             data_EVs = st.file_uploader('Загрузите данные об электромобилях:', type='csv', key='2', accept_multiple_files=False)
 
         if st.checkbox('Использовать demo файлы'):
-            data_houses = r"C:\Users\testingcenter\Downloads\data houses 22 23 February 95 houses.csv"
-            data_EVs = r"C:\Users\testingcenter\Downloads\data EVs.csv"
+            data_houses = ".data/data houses 22 23 February 95 houses.csv"
+            data_EVs = ".data/data EVs.csv"
 
         st.markdown("---")
 
