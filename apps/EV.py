@@ -327,17 +327,19 @@ def app():
         st.markdown("---")
 
         st.write('Опциональные параметры:')
-        col1,col2,col3,col4,col5 = st.columns([0.25,0.25,0.133,0.133,0.133])
-
+        col1,col2,col3,col4,col5,col6 = st.columns([0.2,0.2,0.2,0.15,0.15,0.15])
         with col1:
-            house_koeff = st.number_input('Ограничение на общее энергопотребление', help='Коэфф. для пропорционального увеличения/уменьшения общего потребления домов',min_value=None, max_value=None, value=1) # ограничение сверху на общее энергопотребление - EVs + дома
+            house_koeff = st.number_input('Ограничение энергопотребления', help='Коэфф. для пропорционального увеличения/уменьшения общего потребления домов',min_value=None, max_value=None, value=1) # ограничение сверху на общее энергопотребление - EVs + дома
         with col2:
             EV_koeff = st.number_input('Сколько заряда есть', help='Коэфф. для пропорционального увеличения/уменьшения общего требуемого потребления EV', min_value=None, max_value=None, value=1) # сколько заряда есть
         with col3:
-            use_lighting = st.checkbox('Затраты э/э на освещение') #   сколько заряда требуется
+            koeff = st.number_input('Коэфф предела', help='Коэфф. для пропорционального увеличения/уменьшения общего требуемого потребления EV', min_value=None, max_value=None, value=1.035, format='%f')
+            S_upper_upper_limit = koeff*S_upper_limit
         with col4:
-            key = st.checkbox('Увеличенный предел')  # (Выбор тарифа. 0 - трёхставочный, 1 - почасовой)
+            use_lighting = st.checkbox('Затраты э/э на освещение') #   сколько заряда требуется
         with col5:
+            key = st.checkbox('Увеличенный предел')  # (Выбор тарифа. 0 - трёхставочный, 1 - почасовой)
+        with col6:
             use_quick_charges = st.checkbox('Быстрые зарядки')
 
 
