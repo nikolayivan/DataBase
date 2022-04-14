@@ -98,11 +98,11 @@ def app():
         """)
         st.markdown("---")
         col1,col2,col3 = st.columns([2,2,6])
-        with open(r"C:\Users\testingcenter\Downloads\data_EV_example.csv", "rb") as file:
+        with open("./data/data_EV_example.csv", "rb") as file:
             col1.write("Скачать шаблон для электромобилей:")
             col2.download_button(label="⬇️ Скачать", key='1temp', data=file, file_name='data_EV_example.csv', mime="csv",)
 
-        with open(r"C:\Users\testingcenter\Downloads\data_houses_example.csv", "rb") as file:
+        with open("./data/data_houses_example.csv", "rb") as file:
             col1.write("Скачать шаблон для домов:")
             col2.download_button(label="⬇️ Скачать", key='2temp',data=file, file_name='data_houses_example.csv', mime="csv",)
 
