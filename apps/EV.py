@@ -178,6 +178,7 @@ def app():
 
             if n_houses < 1:
                 st.error('Ошибка: количество домов должно быть > 0!')
+                st.stop()
                 return
             elif n_houses >= 600:
                 return 0.11
@@ -263,6 +264,7 @@ def app():
 
             if prob.status in ["infeasible", "unbounded"]:
                 st.error('Задача оптимизации не имеет решения!!')
+                st.stop()
                 return
 
             X_profile = X.value
@@ -338,6 +340,7 @@ def app():
             house_data, n_int, houses_E = make_1_house_dataset(house_koeff)
         else:
             st.error('Ошибка: указатель выбора файла с данными принимает значения 0 или 1!')
+            st.stop()
             return
 
 
@@ -367,6 +370,7 @@ def app():
             sum_quick = [0]*n_int
         else:
             st.error('Ошибка! use_quick_charges = 0 или 1!')
+            st.stop()
             return
 
         with st.spinner('Идёт расчёт...'):
