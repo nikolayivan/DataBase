@@ -40,7 +40,7 @@ with st.sidebar:
 
 # Add all your application here
 app.add_app("Анализ EV", EV.app)
-app.add_app("Реестор ЦПС", Mapping.app)
+# app.add_app("Реестор ЦПС", Mapping.app)
 
 # The main app
 app.run()
