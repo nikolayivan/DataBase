@@ -439,4 +439,3 @@ def app():
 
     if submitted:
         main_EV_scheduling(P_max, S_upper_limit, S_percent, use_quick_charges, key_houses, data_houses, data_1_house, data_EVs, n_EVs, n_houses)
-
