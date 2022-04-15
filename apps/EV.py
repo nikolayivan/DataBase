@@ -402,8 +402,8 @@ def app():
         col1,col2,col3,col4 = st.columns(4)
         with col1:
             S_percent = st.number_input('Превышение предела установленной мощности, в %',min_value=0.0, max_value=None, value=0.0, format='%f') # ограничение сверху на общее энергопотребление - EVs + дома
-        with col2:
-            use_quick_charges = st.checkbox('Быстрые зарядки')
+#         with col2:
+            use_quick_charges = st.checkbox('Использовать быстрые зарядки')
             
         st.markdown("---")
         st.write('##### Файлы с исходными данными:')
