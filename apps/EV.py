@@ -413,16 +413,16 @@ def app():
         with col2:
             data_EVs = st.file_uploader('Загрузите данные об электромобилях:', type='csv')
         
-        if st.checkbox('Использовать demo файлы'):
-            data_houses = "./data/190 houses.csv"
-            data_1_house = "./data/1 house 24 hours.csv"
-            data_EVs = "./data/data EVs.csv"
-            
         if key_houses:
             data_1_house = data_houses
             data_houses = None
         else:
             data_1_house = None
+            
+        if st.checkbox('Использовать demo файлы'):
+            data_houses = "./data/190 houses.csv"
+            data_1_house = "./data/1 house 24 hours.csv"
+            data_EVs = "./data/data EVs.csv"
 
         for option in [use_quick_charges,key_houses]:
             if option:
